@@ -1,0 +1,15 @@
+{
+    "nav": {
+        "home": "Dashboard",
+        "singleMenuItem": "Usuarios",
+        "singleMenuItem2": "Proyectos",
+        "singleMenuItem3": "Planificador",
+        "singleMenuItem4": "Chat",
+        "singleMenuItem5": "Recursos",
+        "singleMenuItem6": "Mercados",
+        "singleMenuItem7": "Agricultores",
+        "singleMenuItem8": "Certificacion",
+        "singleMenuItem9": "Configurar",
+        "singleMenuItem10": "Soporte"
+    }
+}

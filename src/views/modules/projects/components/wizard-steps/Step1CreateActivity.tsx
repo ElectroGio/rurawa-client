@@ -140,7 +140,8 @@ const Step1CreateActivity = ({ data, onUpdate }: Step1Props) => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                     Instrucciones adicionales (Opcional)
                 </label>
-                <Textarea
+                <Input
+                    textArea
                     {...register('instructions')}
                     placeholder="Proporcione instrucciones específicas para el equipo que ejecutará esta actividad..."
                     rows={3}

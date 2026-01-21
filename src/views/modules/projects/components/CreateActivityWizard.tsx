@@ -15,8 +15,6 @@ import { apiCreateWorkRoute } from '@/services/ProjectService'
 import type { CreateActivityRequest } from '@/@types/activity'
 import type { CreateWorkZoneRequest, CreateProjectTeamMemberRequest, CreateWorkRouteRequest } from '@/@types/project'
 
-const { Step } = Steps
-
 interface WizardData {
     // Step 1
     activityName: string
@@ -210,7 +208,7 @@ const CreateActivityWizard = ({ isOpen, onClose, onSuccess }: CreateActivityWiza
                 <div className="px-6 py-6 border-b bg-gray-50">
                     <Steps current={currentStep} onChange={handleStepChange}>
                         {steps.map((step, index) => (
-                            <Step
+                            <Steps.Item
                                 key={index}
                                 title={step.title}
                                 description={step.description}

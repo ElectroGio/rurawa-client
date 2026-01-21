@@ -123,7 +123,7 @@ const Step3WorkZone = ({ projectId, data, onUpdate }: Step3Props) => {
                 <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <Checkbox
                         checked={useExisting}
-                        onChange={(e) => handleUseExistingChange((e.target as HTMLInputElement).checked)}
+                        onChange={(checked) => handleUseExistingChange(checked)}
                     >
                         Usar una zona guardada
                     </Checkbox>

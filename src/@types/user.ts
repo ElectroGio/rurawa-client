@@ -12,6 +12,7 @@ export interface User {
     state: string
     companyId: string
     isActive: boolean
+    profileImage?: string
 }
 
 export interface CreateUserRequest {

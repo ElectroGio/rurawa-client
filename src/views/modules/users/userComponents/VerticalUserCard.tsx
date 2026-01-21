@@ -1,15 +1,24 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import DropdownButton from './DropdownButton'
+import UserAvatar from '@/components/custom/UserAvatar/UserAvatar'
 
 interface UserCardProps {
-  profileImage: string
+  userId: string
+  firstName?: string
+  lastName?: string
+  email?: string
+  profileImage?: string
   name: string
   profession: string
   isActive: boolean
 }
 
 const VerticalUserCard: React.FC<UserCardProps> = ({
+  userId,
+  firstName,
+  lastName,
+  email,
   profileImage,
   name,
   profession,
@@ -19,19 +28,21 @@ const VerticalUserCard: React.FC<UserCardProps> = ({
 
   const handleOptionSelect = (option: string) => {
     if (option === "Ver perfil") {
-      navigate("/usuarios/perfil/1")
+      navigate(`/usuarios/perfil/${userId}`)
     } else if (option === "Editar perfil") {
-      navigate("/usuarios/perfil/configuracion/1")
+      navigate(`/usuarios/perfil/configuracion/${userId}`)
     }
   }
 
   return (
     <div className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow relative">
-      <div className="w-full h-32 rounded-md overflow-hidden">
-        <img
-          src={profileImage}
-          alt="User Profile"
-          className="w-full h-full object-cover border-2 border-gray-300"
+      <div className="w-full h-32 rounded-md overflow-hidden flex items-center justify-center bg-gray-100">
+        <UserAvatar
+          firstName={firstName}
+          lastName={lastName}
+          email={email}
+          profileImage={profileImage}
+          size={100}
         />
       </div>
       <div className="flex flex-col items-center">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { HiArrowLeft } from 'react-icons/hi'
 import SidebarContainer from './SidebarContainer'
 import SideBarConfig from './Settings/SideBarConfig'
@@ -7,14 +7,39 @@ import PermissionCenter from './Settings/PermissionCenter'
 import ActivityLog from './Settings/ActivityLog'
 import Notifications from './Settings/Notifications'
 import ConnectedDevices from './Settings/ConnectedDevices'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { apiGetUserById } from '@/services/UserService'
+import type { User } from '@/@types/user'
 
 const ConfigProfile = () => {
+  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [selectedSection, setSelectedSection] = useState('Cuenta')
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (id) {
+      loadUser()
+    }
+  }, [id])
+
+  const loadUser = async () => {
+    if (!id) return
+    
+    setLoading(true)
+    try {
+      const userData = await apiGetUserById(id)
+      setUser(userData)
+    } catch (error) {
+      console.error('Error loading user:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleBackClick = () => {
-    navigate('/usuarios/perfil/1')
+    navigate(`/usuarios/perfil/${id}`)
   }
 
   const handleSelectSection = (section: string) => {
@@ -22,9 +47,11 @@ const ConfigProfile = () => {
   }
 
   const renderContent = () => {
+    if (!user) return null
+    
     switch (selectedSection) {
       case 'Cuenta':
-        return <Account />
+        return <Account user={user} onUpdate={loadUser} />
       case 'Centro de permisos':
         return <PermissionCenter />
       case 'Registro de actividades':
@@ -40,16 +67,26 @@ const ConfigProfile = () => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between">
-        <div>
-          <div className="mt-4 text-2xl font-bold text-black">Mi perfil</div>
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <p className="text-gray-500">Cargando...</p>
         </div>
-      </div>
+      ) : !user ? (
+        <div className="flex justify-center items-center h-64">
+          <p className="text-gray-500">Usuario no encontrado</p>
+        </div>
+      ) : (
+        <>
+          <div className="flex justify-between">
+            <div>
+              <div className="mt-4 text-2xl font-bold text-black">Mi perfil</div>
+            </div>
+          </div>
 
-      <div className="flex mt-4">
-        <div className="w-1/4">
-          <SidebarContainer />
-        </div>
+          <div className="flex mt-4">
+            <div className="w-1/4">
+              <SidebarContainer user={user} />
+            </div>
         <div className="flex-1 ml-4">
           <div className="flex items-center">
             <HiArrowLeft className="text-xl mr-2 cursor-pointer text-green-700" onClick={handleBackClick} />

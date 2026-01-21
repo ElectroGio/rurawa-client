@@ -3,19 +3,25 @@ import TabSwitcher from '@/components/custom/TabSwitcher/TabSwitcher'
 import Personal from './Personal'
 import Contacto from './Contact'
 import Usuario from './User'
+import type { User } from '@/@types/user'
 
-const Account: React.FC = () => {
+interface AccountProps {
+  user: User
+  onUpdate: () => void
+}
+
+const Account: React.FC<AccountProps> = ({ user, onUpdate }) => {
   const tabs = ["Personal", "Contacto", "Usuario"]
   const [selectedTab, setSelectedTab] = useState<string>("Personal")
 
   const renderTabContent = () => {
     switch (selectedTab) {
       case "Personal":
-        return <Personal />
+        return <Personal user={user} onUpdate={onUpdate} />
       case "Contacto":
-        return <Contacto />
+        return <Contacto user={user} onUpdate={onUpdate} />
       case "Usuario":
-        return <Usuario />
+        return <Usuario user={user} />
       default:
         return null
     }

@@ -1,11 +1,15 @@
 
   import React from "react";
   import DropdownButton from "./DropdownButton"; 
-  import { useNavigate } from "react-router-dom" 
+  import { useNavigate } from "react-router-dom"
+  import UserAvatar from "@/components/custom/UserAvatar/UserAvatar"
 
 
   interface UserCardProps {
-    profileImage: string;
+    userId: string;
+    firstName?: string;
+    lastName?: string;
+    profileImage?: string;
     group: string;
     zone: string;
     contact: string;
@@ -17,6 +21,9 @@
   
 
   const UserCard: React.FC<UserCardProps> = ({
+    userId,
+    firstName,
+    lastName,
     profileImage,
     name,
     email,
@@ -30,19 +37,21 @@
 
     const handleOptionSelect = (option: string) => {
       if (option === "Ver perfil") {
-        navigate("/usuarios/perfil/1")
+        navigate(`/usuarios/perfil/${userId}`)
       } else if (option === "Editar perfil") {
-        navigate("/usuarios/perfil/configuracion/1")
+        navigate(`/usuarios/perfil/configuracion/${userId}`)
       }
     }
     
     return (
       <div className="flex items-center gap-4 px-6 py-4  rounded-3xl bg-white shadow-sm hover:shadow-md transition-shadow">
         <div className="flex-shrink-0">
-          <img
-            src={profileImage}
-            alt="User Profile"
-            className="w-14 h-14 m-120 rounded-full object-cover border-2 border-gray-300"
+          <UserAvatar
+            firstName={firstName}
+            lastName={lastName}
+            email={email}
+            profileImage={profileImage}
+            size={56}
           />
         </div>
 

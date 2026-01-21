@@ -4,7 +4,6 @@ import { MdMenu, MdAlignVerticalTop } from 'react-icons/md'
 import TabSwitcher from "@/components/custom/TabSwitcher/TabSwitcher"
 import Button from '@/components/ui/Button'
 import { users } from './usersData'
-import { activities } from './activitiesData'
 import HorizontalUserCard from './userComponents/HorizontalUserCard'
 import VerticalUserCard from './userComponents/VerticalUserCard'
 import HorizontalGroupCard from './userComponents/HorizontalGroupCard'
@@ -14,19 +13,28 @@ import VerticalActivityCard from './userComponents/VerticalActivityCard'
 import Dialog from '@/components/ui/Dialog'
 import CreateUserDialog from './userComponents/CreateUserDialog'
 import CreateGroupDialog from './userComponents/CreateGroupDialog'
+import GroupDetailsDialog from './userComponents/GroupDetailsDialog'
+import EditGroupDialog from './userComponents/EditGroupDialog'
+import CreateActivityDialog from './userComponents/CreateActivityDialog'
 import ProjectsFilter from '@/views/modules/projects/components/ProjectsFilter'
 import Pagination from './userComponents/Pagination'
 import { useSessionUser } from '@/store/authStore'
 import { apiGetUsers } from '@/services/UserService'
 import { apiGetGroups } from '@/services/GroupService'
+import { apiGetActivities } from '@/services/ActivityService'
 import type { User } from '@/@types/user'
 import type { Group } from '@/@types/group'
+import type { Activity } from '@/@types/activity'
 
 const UsersView = () => {
   const tabs = ["Usuarios", "Grupos", "Actividades"]
   const [selectedTab, setSelectedTab] = useState<string>("Usuarios")
   const [viewMode, setViewMode] = useState<string>("list")
   const [modalOpen, setModalOpen] = useState(false)
+  const [groupDetailsOpen, setGroupDetailsOpen] = useState(false)
+  const [editGroupOpen, setEditGroupOpen] = useState(false)
+  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null)
+  const [selectedEditGroupId, setSelectedEditGroupId] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [currentActivityPage, setCurrentActivityPage] = useState<number>(1)
   const usersPerPage = 8
@@ -35,12 +43,14 @@ const UsersView = () => {
   const { user: currentUser } = useSessionUser()
   const [realUsers, setRealUsers] = useState<User[]>([])
   const [groups, setGroups] = useState<Group[]>([])
+  const [realActivities, setRealActivities] = useState<Activity[]>([])
   const [loading, setLoading] = useState(false)
   const [totalUsers, setTotalUsers] = useState(0)
+  const [totalActivities, setTotalActivities] = useState(0)
   const [showCompanyWarning, setShowCompanyWarning] = useState(false)
   
   const totalPages = Math.ceil(totalUsers / usersPerPage)
-  const totalActivityPages = Math.ceil(activities.length / activitiesPerPage)
+  const totalActivityPages = Math.ceil(totalActivities / activitiesPerPage)
 
   // Check if user has valid companyId
   useEffect(() => {
@@ -58,9 +68,11 @@ const UsersView = () => {
         loadUsers()
       } else if (selectedTab === "Grupos") {
         loadGroups()
+      } else if (selectedTab === "Actividades") {
+        loadActivities()
       }
     }
-  }, [currentUser, selectedTab, currentPage])
+  }, [currentUser, selectedTab, currentPage, currentActivityPage])
 
   const loadUsers = async () => {
     if (!currentUser?.companyId || currentUser.companyId === '00000000-0000-0000-0000-000000000000') {
@@ -107,6 +119,22 @@ const UsersView = () => {
     }
   }
 
+  const loadActivities = async () => {
+    setLoading(true)
+    try {
+      const response = await apiGetActivities(activitiesPerPage, currentActivityPage)
+      console.log('Activities loaded:', response)
+      setRealActivities(response.items || [])
+      setTotalActivities(response.totalCount || 0)
+    } catch (error) {
+      console.error('Error loading activities:', error)
+      setRealActivities([])
+      setTotalActivities(0)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleTabChange = (tab: string) => {
     setSelectedTab(tab)
     setCurrentPage(1)
@@ -126,6 +154,8 @@ const UsersView = () => {
       loadUsers()
     } else if (selectedTab === "Grupos") {
       loadGroups()
+    } else if (selectedTab === "Actividades") {
+      loadActivities()
     }
   }
 
@@ -137,6 +167,35 @@ const UsersView = () => {
     }
   }
 
+  const handleViewGroupDetails = (groupId: string) => {
+    setSelectedGroupId(groupId)
+    setGroupDetailsOpen(true)
+  }
+
+  const handleEditGroup = (groupId: string) => {
+    setSelectedEditGroupId(groupId)
+    setEditGroupOpen(true)
+    // Close details dialog if open
+    if (groupDetailsOpen) {
+      setGroupDetailsOpen(false)
+      setSelectedGroupId(null)
+    }
+  }
+
+  const handleCloseEditGroup = () => {
+    setEditGroupOpen(false)
+    setSelectedEditGroupId(null)
+  }
+
+  const handleEditGroupSuccess = async () => {
+    await loadGroups()
+  }
+
+  const handleCloseGroupDetails = () => {
+    setGroupDetailsOpen(false)
+    setSelectedGroupId(null)
+  }
+
   const renderContent = () => {
     if (loading) {
       return (
@@ -145,9 +204,6 @@ const UsersView = () => {
         </div>
       )
     }
-
-    const activityStartIndex = (currentActivityPage - 1) * activitiesPerPage
-    const selectedActivities = activities.slice(activityStartIndex, activityStartIndex + activitiesPerPage)
 
     if (selectedTab === "Usuarios") {
       return (
@@ -158,7 +214,10 @@ const UsersView = () => {
             realUsers.map((us) => (
               <HorizontalUserCard
                 key={us.id}
-                profileImage={(us.firstName?.[0] || us.email?.[0] || 'U').toUpperCase()}
+                userId={us.id}
+                firstName={us.firstName}
+                lastName={us.lastName}
+                profileImage={us.profileImage}
                 name={`${us.firstName || ''} ${us.lastName || ''}`}
                 email={us.email || ''}
                 group="-"
@@ -173,7 +232,11 @@ const UsersView = () => {
               {realUsers.map((us) => (
                 <VerticalUserCard
                   key={us.id}
-                  profileImage={(us.firstName?.[0] || us.email?.[0] || 'U').toUpperCase()}
+                  userId={us.id}
+                  firstName={us.firstName}
+                  lastName={us.lastName}
+                  email={us.email}
+                  profileImage={us.profileImage}
                   name={`${us.firstName || ''} ${us.lastName || ''}`}
                   profession={us.profession || '-'}
                   isActive={us.isActive ?? true}
@@ -193,9 +256,12 @@ const UsersView = () => {
             groups.map((group) => (
               <HorizontalGroupCard
                 key={group.id}
+                groupId={group.id}
                 image={group.name[0].toUpperCase()}
                 title={group.name}
                 location={group.description || 'Sin descripción'}
+                onViewDetails={handleViewGroupDetails}
+                onEditGroup={handleEditGroup}
               />
             ))
           ) : (
@@ -203,9 +269,12 @@ const UsersView = () => {
               {groups.map((group) => (
                 <VerticalGroupCard
                   key={group.id}
+                  groupId={group.id}
                   image={group.name[0].toUpperCase()}
                   title={group.name}
                   location={group.description || 'Sin descripción'}
+                  onViewDetails={handleViewGroupDetails}
+                  onEditGroup={handleEditGroup}
                 />
               ))}
             </div>
@@ -216,31 +285,33 @@ const UsersView = () => {
     if (selectedTab === "Actividades") {
       return (
         <div className="grid gap-4 p-4">
-          {viewMode === "list" ? (
-            selectedActivities.map((activity) => (
+          {realActivities.length === 0 ? (
+            <p className="text-center text-gray-500">No hay actividades disponibles</p>
+          ) : viewMode === "list" ? (
+            realActivities.map((activity) => (
               <HorizontalActivityCard
-                key={activity.name}
-                profileImage={activity.profileImage}
+                key={activity.id}
+                profileImage=""
                 name={activity.name}
-                role={activity.role}
-                status={activity.status}
-                pending={activity.pending}
-                assigned={activity.assigned}
-                completed={activity.completed}
+                role={activity.type}
+                status={activity.type}
+                pending={0}
+                assigned={0}
+                completed={0}
               />
             ))
           ) : (
             <div className="grid grid-cols-4 gap-4">
-              {selectedActivities.map((activity) => (
+              {realActivities.map((activity) => (
                 <VerticalActivityCard
-                  key={activity.name}
-                  profileImage={activity.profileImage}
+                  key={activity.id}
+                  profileImage=""
                   name={activity.name}
-                  role={activity.role}
-                  status={activity.status}
-                  pending={activity.pending}
-                  assigned={activity.assigned}
-                  completed={activity.completed}
+                  role={activity.type}
+                  status={activity.type}
+                  pending={0}
+                  assigned={0}
+                  completed={0}
                 />
               ))}
             </div>
@@ -324,11 +395,23 @@ const UsersView = () => {
           ) : selectedTab === "Grupos" ? (
             <CreateGroupDialog onClose={onDialogClose} onSuccess={onDialogSuccess} />
           ) : (
-            <div className="p-6">
-              <p>Modal de nueva actividad (próximamente)</p>
-            </div>
+            <CreateActivityDialog onClose={onDialogClose} onSuccess={onDialogSuccess} />
           )}
         </Dialog>
+      )}
+      {groupDetailsOpen && selectedGroupId && (
+        <GroupDetailsDialog
+          groupId={selectedGroupId}
+          onClose={handleCloseGroupDetails}
+          onEdit={handleEditGroup}
+        />
+      )}
+      {editGroupOpen && selectedEditGroupId && (
+        <EditGroupDialog
+          groupId={selectedEditGroupId}
+          onClose={handleCloseEditGroup}
+          onSuccess={handleEditGroupSuccess}
+        />
       )}
     </div>
   )

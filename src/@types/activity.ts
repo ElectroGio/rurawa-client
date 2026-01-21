@@ -1,14 +1,11 @@
 export interface Activity {
     id: string
-    title: string
-    description?: string
+    name: string
+    description: string
+    type: string
     startDate: string
-    endDate?: string
-    status: string
-    priority: string
+    endDate: string
     projectId: string
-    companyId: string
-    createdAt: string
 }
 
 export interface ActivityWithUsers extends Activity {
@@ -23,20 +20,18 @@ export interface ActivityUser {
 }
 
 export interface CreateActivityRequest {
-    title: string
-    description?: string
+    name: string
+    description: string
+    type: string
     startDate: string
-    endDate?: string
-    status: string
-    priority: string
+    endDate: string
     projectId: string
 }
 
 export interface UpdateActivityRequest {
-    title?: string
+    name?: string
     description?: string
+    type?: string
     startDate?: string
     endDate?: string
-    status?: string
-    priority?: string
 }

@@ -3,8 +3,9 @@ export interface Group {
     name: string
     description?: string
     companyId: string
-    userCount: number
-    createdAt: string
+    userCount?: number
+    createdAt?: string
+    users?: GroupUser[]
 }
 
 export interface GroupWithUsers extends Group {
@@ -16,6 +17,7 @@ export interface GroupUser {
     firstName: string
     lastName: string
     email: string
+    profileImage?: string
 }
 
 export interface CreateGroupRequest {

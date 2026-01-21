@@ -3,19 +3,29 @@ import { useNavigate } from 'react-router-dom'
 import DropdownButton from './DropdownButton'
 
 interface GroupCardProps {
+  groupId: string
   image: string
   title: string
   location: string
+  onViewDetails?: (groupId: string) => void
+  onEditGroup?: (groupId: string) => void
 }
 
-const VerticalGroupCard: React.FC<GroupCardProps> = ({ image, title, location }) => {
+const VerticalGroupCard: React.FC<GroupCardProps> = ({ 
+  groupId,
+  image, 
+  title, 
+  location,
+  onViewDetails,
+  onEditGroup
+}) => {
   const navigate = useNavigate()
 
   const handleOptionSelect = (option: string) => {
-    if (option === "Ver grupo") {
-      // Lógica para ver grupo
-    } else if (option === "Editar grupo") {
-      // Lógica para editar grupo
+    if (option === "Ver grupo" && onViewDetails) {
+      onViewDetails(groupId)
+    } else if (option === "Editar grupo" && onEditGroup) {
+      onEditGroup(groupId)
     }
   }
 

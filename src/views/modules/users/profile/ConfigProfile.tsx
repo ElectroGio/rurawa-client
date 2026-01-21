@@ -87,21 +87,23 @@ const ConfigProfile = () => {
             <div className="w-1/4">
               <SidebarContainer user={user} />
             </div>
-        <div className="flex-1 ml-4">
-          <div className="flex items-center">
-            <HiArrowLeft className="text-xl mr-2 cursor-pointer text-green-700" onClick={handleBackClick} />
-            <span className="text-xl font-bold text-black">Configurar</span>
-          </div>
-          <div className="flex mt-4">
-            <div className="w-1/3 flex-shrink-0">
-              <SideBarConfig onSelect={handleSelectSection} />
+            <div className="flex-1 ml-4">
+              <div className="flex items-center">
+                <HiArrowLeft className="text-xl mr-2 cursor-pointer text-green-700" onClick={handleBackClick} />
+                <span className="text-xl font-bold text-black">Configurar</span>
+              </div>
+              <div className="flex mt-4">
+                <div className="w-1/3 flex-shrink-0">
+                  <SideBarConfig onSelect={handleSelectSection} />
+                </div>
+                <div className="flex-1 ml-4 bg-white rounded-3xl p-4 shadow-md">
+                  {renderContent()}
+                </div>
+              </div>
             </div>
-            <div className="flex-1 ml-4 bg-white rounded-3xl p-4 shadow-md">
-              {renderContent()}
-            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   )
 }

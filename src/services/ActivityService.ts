@@ -18,6 +18,13 @@ export async function apiGetActivities(
     })
 }
 
+export async function apiGetActivitiesByProjectId(projectId: string) {
+    return ApiService.fetchDataWithAxios<Activity[]>({
+        url: `/activities/project/${projectId}`,
+        method: 'get',
+    })
+}
+
 export async function apiGetActivityById(id: string) {
     return ApiService.fetchDataWithAxios<ActivityWithUsers>({
         url: `/activities/${id}`,

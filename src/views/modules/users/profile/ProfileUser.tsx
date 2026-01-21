@@ -93,46 +93,48 @@ const ProfileUser = () => {
             <div className="w-1/4">
               <SidebarContainer user={user} />
             </div>
-        <div className="flex-1 ml-4">
-          <div className="flex items-center justify-between">
-            <div className="">
-              <TabSwitcher
-                tabs={tabs}
-                selectedTab={selectedTab}
-                onTabChange={(tab) => setSelectedTab(tab)}
-              />
-            </div>
-            {selectedTab === "Proyectos" && (
-              <div className="flex items-center space-x-2">
-                <button className="bg-white p-3 rounded-full shadow-md">
-                  <HiFilter className="text-gray-600 text-xl" />
-                </button>
-                <div className="relative">
-                  <button
-                    className="bg-white p-3 rounded-full shadow-md flex items-center"
-                    onClick={toggleDropdown}
-                  >
-                    Opciones
-                    <HiChevronDown className="ml-2 text-gray-600" />
-                  </button>
-                  {dropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
-                      <ul className="py-1">
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Proyectos Actuales</li>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Proyectos Antiguos</li>
-                      </ul>
-                    </div>
-                  )}
+            <div className="flex-1 ml-4">
+              <div className="flex items-center justify-between">
+                <div className="">
+                  <TabSwitcher
+                    tabs={tabs}
+                    selectedTab={selectedTab}
+                    onTabChange={(tab) => setSelectedTab(tab)}
+                  />
                 </div>
+                {selectedTab === "Proyectos" && (
+                  <div className="flex items-center space-x-2">
+                    <button className="bg-white p-3 rounded-full shadow-md">
+                      <HiFilter className="text-gray-600 text-xl" />
+                    </button>
+                    <div className="relative">
+                      <button
+                        className="bg-white p-3 rounded-full shadow-md flex items-center"
+                        onClick={toggleDropdown}
+                      >
+                        Opciones
+                        <HiChevronDown className="ml-2 text-gray-600" />
+                      </button>
+                      {dropdownOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
+                          <ul className="py-1">
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Proyectos Actuales</li>
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Proyectos Antiguos</li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          <div className="mt-4">
-            {renderContent()}
+              <div className="mt-4">
+                {renderContent()}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   )
 }

@@ -8,12 +8,12 @@ export type AppConfig = {
 }
 
 const appConfig: AppConfig = {
-    apiPrefix: '/api',
+    apiPrefix: import.meta.env.VITE_API_BASE_URL || '/api',
     authenticatedEntryPath: '/home',
     unAuthenticatedEntryPath: '/sign-in',
     locale: 'es',
     accessTokenPersistStrategy: 'cookies',
-    enableMock: true,
+    enableMock: false,
 }
 
 export default appConfig

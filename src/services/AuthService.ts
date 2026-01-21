@@ -7,6 +7,9 @@ import type {
     ResetPassword,
     SignInResponse,
     SignUpResponse,
+    VerifyPhone,
+    RefreshTokenRequest,
+    RefreshTokenResponse,
 } from '@/@types/auth'
 
 export async function apiSignIn(data: SignInCredential) {
@@ -19,7 +22,7 @@ export async function apiSignIn(data: SignInCredential) {
 
 export async function apiSignUp(data: SignUpCredential) {
     return ApiService.fetchDataWithAxios<SignUpResponse>({
-        url: `${apiBaseURL}${endpointConfig.signUp}`,
+        url: endpointConfig.signUp,
         method: 'post',
         data,
     })
@@ -45,5 +48,35 @@ export async function apiResetPassword<T>(data: ResetPassword) {
         url: endpointConfig.resetPassword,
         method: 'post',
         data,
+    })
+}
+
+export async function apiVerifyPhone<T>(data: VerifyPhone) {
+    return ApiService.fetchDataWithAxios<T>({
+        url: endpointConfig.verifyPhone,
+        method: 'post',
+        data,
+    })
+}
+
+export async function apiResendVerificationCode<T>(userId: string) {
+    return ApiService.fetchDataWithAxios<T>({
+        url: `${endpointConfig.resendVerificationCode}/${userId}`,
+        method: 'post',
+    })
+}
+
+export async function apiRefreshToken(data: RefreshTokenRequest) {
+    return ApiService.fetchDataWithAxios<RefreshTokenResponse>({
+        url: endpointConfig.refreshToken,
+        method: 'post',
+        data,
+    })
+}
+
+export async function apiGetCurrentUser() {
+    return ApiService.fetchDataWithAxios({
+        url: endpointConfig.currentUser,
+        method: 'get',
     })
 }

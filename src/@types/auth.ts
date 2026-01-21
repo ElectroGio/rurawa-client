@@ -4,40 +4,25 @@ export type SignInCredential = {
 };
 
 export type SignInResponse = {
-  token: string;
-  user: {
-    userId: string;
-    userName: string;
-    authority: string[];
-    avatar: string;
-    email: string;
-  };
+  accessToken: string;
+  refreshToken: string;
+  userId: string;
+  email: string;
+  roles: string[];
+  isPhoneVerified: boolean;
 };
 
 export type SignUpResponse = SignInResponse;
 
 export type SignUpCredential = {
-  company: {
-    name: string;
-    taxId: string;
-    businessCategory: string;
-    businessSector: string;
-    employeeSize: string;
-    address: {
-      street: string;
-      city: string;
-      state: string;
-      country: string;
-    };
-  };
-  user: {
-    firstName: string;
-    lastName: string;
-    documentNumber: string;
-    email: string;
-    phone: string;
-    password: string;
-  };
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  documentNumber: string;
+  countryCode: string;
+  phoneNumber: string;
+  companyId: string;
 };
 
 export type ForgotPassword = {
@@ -45,7 +30,23 @@ export type ForgotPassword = {
 };
 
 export type ResetPassword = {
-  password: string;
+  email: string;
+  token: string;
+  newPassword: string;
+};
+
+export type VerifyPhone = {
+  userId: string;
+  code: string;
+};
+
+export type RefreshTokenRequest = {
+  refreshToken: string;
+};
+
+export type RefreshTokenResponse = {
+  accessToken: string;
+  refreshToken: string;
 };
 
 export type AuthRequestStatus = "success" | "failed" | "";
@@ -61,11 +62,12 @@ export type User = {
   userName?: string | null;
   email?: string | null;
   authority?: string[];
+  isPhoneVerified?: boolean;
 };
 
 export type Token = {
   accessToken: string;
-  refereshToken?: string;
+  refreshToken?: string;
 };
 
 export type OauthSignInCallbackPayload = {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Alert from "@/components/ui/Alert"
 import SignInForm from "./components/SignInForm"
 // import OauthSignIn from "./components/OauthSignIn"
@@ -11,6 +11,7 @@ import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { apiSignIn } from "@/services/AuthService"
+import { useLocation } from "react-router-dom"
 
 type SignInProps = {
   signUpUrl?: string
@@ -33,9 +34,23 @@ export const SignInBase = ({
   forgetPasswordUrl = "/forgot-password",
   disableSubmit,
 }: SignInProps) => {
+  const location = useLocation()
   const [message, setMessage] = useTimeOutMessage()
   const { signIn } = useAuth()
   const [submitting, setSubmitting] = useState(false)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+
+  // Mostrar mensaje de éxito si viene del registro
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message)
+      // Limpiar el mensaje después de 5 segundos
+      const timer = setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [location])
 
   const {
     handleSubmit,
@@ -76,6 +91,11 @@ export const SignInBase = ({
           Ingresar a rurawa
         </p>
       </div>
+      {successMessage && (
+        <Alert showIcon className="mb-4" type="success">
+          <>{successMessage}</>
+        </Alert>
+      )}
       {message && (
         <Alert showIcon className="mb-4" type="danger">
           <>{message}</>

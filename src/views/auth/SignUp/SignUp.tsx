@@ -340,7 +340,11 @@ export const SignUpBase = ({
       console.log("Sign Up Result:", result);
       if (result) {
         setLoading(false);
-        navigate("/success-sign-up");
+        // Limpiar el localStorage después del registro exitoso
+        localStorage.removeItem("formData");
+        localStorage.removeItem("step");
+        // Redirigir al login con un mensaje de éxito
+        navigate("/sign-in", { state: { message: "Registro exitoso. Por favor inicia sesión con tus credenciales." } });
       }
     } catch (error) {
       setLoading(false);
@@ -703,6 +707,12 @@ export const SignUpBase = ({
           )}
         </div>
         <div className="w-full">
+          <div className="text-center py-2 text-sm text-gray-600">
+            ¿Ya tienes una cuenta?{' '}
+            <a href="/sign-in" className="text-secondary hover:text-secondary-mild font-semibold">
+              Ingresa aquí
+            </a>
+          </div>
           <div className="flex  justify-between px-6 py-4 border-t-[#E4E6E8] border-t-2 w-full">
             <Button
               // loading={isSubmitting}

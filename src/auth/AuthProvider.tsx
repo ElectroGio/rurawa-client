@@ -45,7 +45,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     const setSessionSignedIn = useSessionUser(
         (state) => state.setSessionSignedIn,
     )
-    const { token, setToken } = useToken()
+    const { token, setToken, setRefreshToken } = useToken()
 
     const authenticated = Boolean(token && signedIn)
 
@@ -63,6 +63,9 @@ function AuthProvider({ children }: AuthProviderProps) {
 
     const handleSignIn = (tokens: Token, user?: User) => {
         setToken(tokens.accessToken)
+        if (tokens.refreshToken) {
+            setRefreshToken(tokens.refreshToken)
+        }
         setSessionSignedIn(true)
 
         if (user) {
@@ -80,7 +83,20 @@ function AuthProvider({ children }: AuthProviderProps) {
         try {
             const resp = await apiSignIn(values)
             if (resp) {
-                handleSignIn({ accessToken: resp.token }, resp.user)
+                const user: User = {
+                    userId: resp.userId,
+                    email: resp.email,
+                    authority: resp.roles,
+                    isPhoneVerified: resp.isPhoneVerified,
+                    companyId: resp.companyId,
+                }
+                handleSignIn(
+                    { 
+                        accessToken: resp.accessToken,
+                        refreshToken: resp.refreshToken 
+                    }, 
+                    user
+                )
                 redirect()
                 return {
                     status: 'success',

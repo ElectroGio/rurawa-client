@@ -73,8 +73,14 @@ export const useToken = () => {
         storage.setItem(TOKEN_NAME_IN_STORAGE, token)
     }
 
+    const setRefreshToken = (refreshToken: string) => {
+        storage.setItem('refreshToken', refreshToken)
+    }
+
     return {
         setToken,
+        setRefreshToken,
         token: storage.getItem(TOKEN_NAME_IN_STORAGE),
+        refreshToken: storage.getItem('refreshToken'),
     }
 }

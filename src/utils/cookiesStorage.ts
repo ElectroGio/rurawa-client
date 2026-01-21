@@ -10,8 +10,8 @@ const cookiesStorage: StateStorage = {
     getItem: (name: string) => {
         return Cookies.get(name) ?? null
     },
-    setItem: (name: string, value: string, expires: number | Date = 1) => {
-        Cookies.set(name, value, { expires })
+    setItem: (name: string, value: string) => {
+        Cookies.set(name, value, { expires: 7 }) // 7 days expiration
     },
     removeItem: (name: string) => {
         Cookies.remove(name)

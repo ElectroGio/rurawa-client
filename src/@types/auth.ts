@@ -10,9 +10,18 @@ export type SignInResponse = {
   email: string;
   roles: string[];
   isPhoneVerified: boolean;
+  companyId?: string;
 };
 
-export type SignUpResponse = SignInResponse;
+export type SignUpResponse = {
+  accessToken: string;
+  refreshToken: string;
+  userId: string;
+  email: string;
+  roles: string[];
+  isPhoneVerified: boolean;
+  companyId?: string;
+};
 
 export type SignUpCredential = {
   email: string;
@@ -63,6 +72,7 @@ export type User = {
   email?: string | null;
   authority?: string[];
   isPhoneVerified?: boolean;
+  companyId?: string | null;
 };
 
 export type Token = {

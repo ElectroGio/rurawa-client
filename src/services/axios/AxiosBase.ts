@@ -3,6 +3,7 @@ import AxiosResponseIntrceptorErrorCallback from './AxiosResponseIntrceptorError
 import AxiosRequestIntrceptorConfigCallback from './AxiosRequestIntrceptorConfigCallback'
 import { apiRefreshToken } from '../AuthService'
 import appConfig from '@/configs/app.config'
+import cookiesStorage from '@/utils/cookiesStorage'
 import { TOKEN_NAME_IN_STORAGE, REFRESH_TOKEN_NAME_IN_STORAGE } from '@/constants/api.constant'
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 
@@ -71,6 +72,8 @@ AxiosBase.interceptors.response.use(
                 refreshToken = localStorage.getItem(REFRESH_TOKEN_NAME_IN_STORAGE) || ''
             } else if (storage === 'sessionStorage') {
                 refreshToken = sessionStorage.getItem(REFRESH_TOKEN_NAME_IN_STORAGE) || ''
+            } else if (storage === 'cookies') {
+                refreshToken = cookiesStorage.getItem(REFRESH_TOKEN_NAME_IN_STORAGE) || ''
             }
 
             if (!refreshToken) {
@@ -91,6 +94,9 @@ AxiosBase.interceptors.response.use(
                 } else if (storage === 'sessionStorage') {
                     sessionStorage.setItem(TOKEN_NAME_IN_STORAGE, accessToken)
                     sessionStorage.setItem(REFRESH_TOKEN_NAME_IN_STORAGE, newRefreshToken)
+                } else if (storage === 'cookies') {
+                    cookiesStorage.setItem(TOKEN_NAME_IN_STORAGE, accessToken)
+                    cookiesStorage.setItem(REFRESH_TOKEN_NAME_IN_STORAGE, newRefreshToken)
                 }
 
                 processQueue(null, accessToken)
@@ -109,6 +115,9 @@ AxiosBase.interceptors.response.use(
                 } else if (storage === 'sessionStorage') {
                     sessionStorage.removeItem(TOKEN_NAME_IN_STORAGE)
                     sessionStorage.removeItem(REFRESH_TOKEN_NAME_IN_STORAGE)
+                } else if (storage === 'cookies') {
+                    cookiesStorage.removeItem(TOKEN_NAME_IN_STORAGE)
+                    cookiesStorage.removeItem(REFRESH_TOKEN_NAME_IN_STORAGE)
                 }
                 window.location.href = '/sign-in'
                 return Promise.reject(refreshError)

@@ -1,10 +1,11 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import Avatar from '@/components/ui/Avatar'
 import DropdownButton from './DropdownButton'
 
 interface GroupCardProps {
   groupId: string
-  image: string
+  image?: string
   title: string
   location: string
   onViewDetails?: (groupId: string) => void
@@ -32,11 +33,14 @@ const HorizontalGroupCard: React.FC<GroupCardProps> = ({
   return (
     <div className="flex items-center gap-4 px-4 py-0  rounded-3xl bg-white shadow-sm hover:shadow-md transition-shadow">
       <div className="relative flex items-center gap-4 p-4 rounded-lg w-60">
-        <img
+        <Avatar
+          size={64}
           src={image}
           alt={title}
-          className="w-16 h-16 rounded-full object-cover"
-        />
+          className="bg-gradient-to-br from-blue-500 to-blue-600 text-white font-semibold"
+        >
+          {!image && title.charAt(0).toUpperCase()}
+        </Avatar>
         <div className="flex flex-col">
           <span className="text-sm font-semibold text-black truncate w-32">{title}</span>
           <span className="text-xs text-gray-500">{location}</span>

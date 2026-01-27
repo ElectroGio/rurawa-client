@@ -8,6 +8,8 @@ const ResourceModule = () => {
   const handleResourceClick = (title: string) => {
     if (title === 'Proyectos') {
       navigate('/proyectos'); 
+    } else if (title === 'Cuestionarios') {
+      navigate('/app/questionnaires');
     }
   };
 

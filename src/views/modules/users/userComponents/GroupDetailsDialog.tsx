@@ -3,7 +3,7 @@ import { IoClose } from 'react-icons/io5';
 import { apiGetGroupById } from '../../../../services/GroupService';
 import { Group, GroupUser } from '../../../../@types/group';
 import UserAvatar from '../../../../components/custom/UserAvatar/UserAvatar';
-import { Button } from '../../../../components/ui/button';
+import Button from '@/components/ui/Button';
 
 interface GroupDetailsDialogProps {
   groupId: string;

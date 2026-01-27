@@ -10,6 +10,11 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import type { LayoutType } from '@/@types/theme'
 import ResourceModule from '@/views/modules/resource/ResourceModule'
 import Proyectos from '@/views/modules/resource/components/ResouceProyectsPage'
+import QuestionnairesView from '@/views/modules/questionnaires/QuestionnairesView'
+import QuestionnaireDetailView from '@/views/modules/questionnaires/QuestionnaireDetailView'
+import EditQuestionnaireView from '@/views/modules/questionnaires/EditQuestionnaireView'
+import RespondQuestionnaireView from '@/views/modules/questionnaires/RespondQuestionnaireView'
+import QuestionnaireResponsesView from '@/views/modules/questionnaires/QuestionnaireResponsesView'
 
 interface ViewsProps {
     pageContainerType?: 'default' | 'gutterless' | 'contained'
@@ -71,6 +76,11 @@ const AllRoutes = (props: AllRoutesProps) => {
             <Route path="/" element={<ResourceModule />} />
 
             <Route path="/proyectos" element={<Proyectos />} />
+            <Route path="/app/questionnaires" element={<QuestionnairesView />} />
+            <Route path="/app/questionnaires/:id" element={<QuestionnaireDetailView />} />
+            <Route path="/app/questionnaires/:id/edit" element={<EditQuestionnaireView />} />
+            <Route path="/app/questionnaires/:id/respond" element={<RespondQuestionnaireView />} />
+            <Route path="/app/questionnaires/:id/responses" element={<QuestionnaireResponsesView />} />
         </Routes>
     )
 }

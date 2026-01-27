@@ -4,7 +4,7 @@ import { IoClose } from 'react-icons/io5';
 import { apiCreateActivity } from '@/services/ActivityService';
 import { apiGetProjects } from '@/services/ProjectService';
 import { Project } from '@/@types/project';
-import { Button } from '@/components/ui/button';
+import Button from '@/components/ui/Button';
 
 interface CreateActivityDialogProps {
   onClose: () => void;

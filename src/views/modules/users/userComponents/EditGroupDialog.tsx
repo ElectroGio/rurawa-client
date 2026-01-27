@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { IoClose } from 'react-icons/io5';
 import { apiUpdateGroup, apiGetGroupById } from '../../../../services/GroupService';
 import { Group } from '../../../../@types/group';
-import { Button } from '../../../../components/ui/button';
+import { Button } from '@/components/ui/Button';
 
 interface EditGroupDialogProps {
   groupId: string;

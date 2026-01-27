@@ -257,7 +257,6 @@ const UsersView = () => {
               <HorizontalGroupCard
                 key={group.id}
                 groupId={group.id}
-                image={group.name[0].toUpperCase()}
                 title={group.name}
                 location={group.description || 'Sin descripción'}
                 onViewDetails={handleViewGroupDetails}
@@ -270,7 +269,6 @@ const UsersView = () => {
                 <VerticalGroupCard
                   key={group.id}
                   groupId={group.id}
-                  image={group.name[0].toUpperCase()}
                   title={group.name}
                   location={group.description || 'Sin descripción'}
                   onViewDetails={handleViewGroupDetails}
